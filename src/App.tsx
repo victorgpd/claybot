@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { NotificationProvider } from "./context/notificationContext";
 
 function App() {
-  const router = createBrowserRouter([...screensRoutes, ...loggedScreensRoutes]);
+  const router = createBrowserRouter([...screensRoutes, ...loggedScreensRoutes], { basename: "/claybot" });
 
   return (
     <NotificationProvider>
