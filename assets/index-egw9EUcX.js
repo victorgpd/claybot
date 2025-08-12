@@ -2651,7 +2651,7 @@ SPDX-License-Identifier: Apache-2.0
 
   overflow-y: auto;
 
-  gap: 5px;
+  gap: 15px;
   display: flex;
   flex-flow: row;
 `,$de=ur.div`
