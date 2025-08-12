@@ -5,9 +5,13 @@ import { Input, Select, Button } from "antd";
 import { useAppSelector } from "../../redux/hooks";
 
 const ContainerUser = styled.div`
-  width: 100%;
-  display: flex;
+  flex: 0 0 auto;
+
+  width: 250px;
+
   gap: 10px;
+  display: flex;
+  flex-flow: column wrap;
   align-items: center;
 
   & > * {
@@ -18,6 +22,10 @@ const ContainerUser = styled.div`
   button {
     flex: none;
   }
+`;
+
+const InputFormated = styled(Input)`
+  width: 100%;
 `;
 
 interface IUserWithId extends IUserWithCargos {
@@ -69,16 +77,16 @@ const UserContainer = ({ userFields, options, selectedUserIds, onUserFieldsChang
             value: user.id,
             label: `${user.nome} (${user.cpf})`,
           }))}
-        style={{ minWidth: 200 }}
+        style={{ width: "100%" }}
       />
 
-      <Input placeholder="Nome" value={userFields.nome} onChange={(e) => onInputChange("nome", e.target.value)} disabled={userFields.id ? true : false} />
-      <Input placeholder="CPF" value={userFields.cpf} onChange={(e) => onInputChange("cpf", e.target.value)} disabled={userFields.id ? true : false} />
-      <Input placeholder="Telefone" value={userFields.telefone} onChange={(e) => onInputChange("telefone", e.target.value)} disabled={userFields.id ? true : false} />
-      <Input placeholder="Gênero" value={userFields.genero} onChange={(e) => onInputChange("genero", e.target.value)} disabled={userFields.id ? true : false} />
-      <Input placeholder="Email" value={userFields.email} onChange={(e) => onInputChange("email", e.target.value)} disabled={userFields.id ? true : false} />
+      <InputFormated placeholder="Nome" value={userFields.nome} onChange={(e) => onInputChange("nome", e.target.value)} disabled={userFields.id ? true : false} />
+      <InputFormated placeholder="CPF" value={userFields.cpf} onChange={(e) => onInputChange("cpf", e.target.value)} disabled={userFields.id ? true : false} />
+      <InputFormated placeholder="Telefone" value={userFields.telefone} onChange={(e) => onInputChange("telefone", e.target.value)} disabled={userFields.id ? true : false} />
+      <InputFormated placeholder="Gênero" value={userFields.genero} onChange={(e) => onInputChange("genero", e.target.value)} disabled={userFields.id ? true : false} />
+      <InputFormated placeholder="Email" value={userFields.email} onChange={(e) => onInputChange("email", e.target.value)} disabled={userFields.id ? true : false} />
 
-      <Select mode="tags" allowClear placeholder={`Usuários do grupo`} value={userFields.cargos} onChange={onCargosChange} options={options} />
+      <Select mode="tags" allowClear placeholder={`Cargos`} value={userFields.cargos} onChange={onCargosChange} options={options} style={{ width: "100%" }} />
 
       <Button danger onClick={onDelete} style={{ flex: "none" }}>
         Remover

@@ -11,6 +11,8 @@ import { useAppSelector } from "../../../redux/hooks";
 import { ButtonsTable, ContainerButtons, ContainerButtonsTable, ContainerUsers } from "./styles";
 import { useExecute } from "../../../hooks/useExecute";
 import { DeleteOutlined } from "@ant-design/icons";
+import type { ColumnsType } from "antd/es/table";
+import type { Key } from "react";
 
 interface IUserWithId extends IUserWithCargos {
   uid: string;
@@ -20,7 +22,7 @@ interface IUserWithId extends IUserWithCargos {
 const ExecutarTab = () => {
   const { saveInscricoes, loading, deleteInscricao } = useExecute();
 
-  const { inscricoesPendentes, usersInscricoes, users = [] } = useAppSelector((state) => state.globalReducer);
+  const { inscricoesPendentes = [], inscricoesConcluidas = [], usersInscricoes = [], users = [] } = useAppSelector((state) => state.globalReducer);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInscricao, setSelectedInscricao] = useState<{ id: number; cargo: string } | null>(null);
@@ -40,22 +42,56 @@ const ExecutarTab = () => {
   ]);
 
   const [options, setOptions] = useState<{ label: string; value: string }[]>([]);
+
   const [items, setItems] = useState<TabsProps["items"]>([]);
 
   useEffect(() => {
-    if (inscricoesPendentes) {
-      const itemsInscricoes = inscricoesPendentes.map((inscricao) => {
-        const filteredUsers = usersInscricoes.filter((user) => user.cargo.toLowerCase() === inscricao.toLowerCase());
+    if (inscricoesPendentes.length || inscricoesConcluidas.length) {
+      const cargosUnicos = Array.from(new Set([...inscricoesPendentes, ...inscricoesConcluidas].map((cargo) => cargo.toLowerCase())));
 
-        const customColumns = [
+      const itemsInscricoes = cargosUnicos.map((inscricao) => {
+        const filteredUsers = usersInscricoes.filter((user) => user.cargo.toLowerCase() === inscricao);
+
+        const columns: ColumnsType<IUserWithCargo> = [
           { title: "Id", dataIndex: "id", key: "id", render: () => uuidv4() },
           { title: "Nome", dataIndex: "nome", key: "nome" },
           { title: "CPF", dataIndex: "cpf", key: "cpf" },
           { title: "Telefone", dataIndex: "telefone", key: "telefone" },
           { title: "Genêro", dataIndex: "genero", key: "genero" },
           { title: "Email", dataIndex: "email", key: "email" },
-          { title: "Status", dataIndex: "status", key: "status" },
-          { title: "Cargo", key: "cargo", render: () => inscricao.toLocaleUpperCase() },
+          {
+            title: "Status",
+            dataIndex: "status",
+            key: "status",
+            filters: [
+              { text: "Erro", value: "erro" },
+              { text: "Pendente", value: "pendente" },
+              { text: "Concluído", value: "concluido" },
+            ],
+            onFilter: (value: Key | boolean, record) => record.status === value,
+            render: (_: unknown, record: IUserWithCargo & Partial<IUserWithId>) => {
+              let color: string;
+              switch (record.status) {
+                case "erro":
+                  color = "#ff4d4f";
+                  break;
+                case "pendente":
+                  color = "#faad14";
+                  break;
+                case "concluida":
+                  color = "#52c41a";
+                  break;
+                default:
+                  color = "blue";
+              }
+              return <span style={{ color }}>{record.status}</span>;
+            },
+          },
+          {
+            title: "Cargo",
+            key: "cargo",
+            render: () => inscricao.toLocaleUpperCase(),
+          },
           {
             title: "Ações",
             key: "action",
@@ -72,10 +108,10 @@ const ExecutarTab = () => {
 
         return {
           key: inscricao,
-          label: inscricao,
+          label: inscricao.toLocaleUpperCase(),
           children: (
             <div style={{ height: "100%", overflowY: "auto" }}>
-              <Table<IUserWithCargo> rowKey="cpf" columns={customColumns} dataSource={filteredUsers} />
+              <Table<IUserWithCargo> rowKey="cpf" columns={columns} dataSource={filteredUsers} pagination={{ pageSize: 12 }} />
             </div>
           ),
         };
@@ -83,7 +119,7 @@ const ExecutarTab = () => {
 
       setItems(itemsInscricoes);
     }
-  }, [inscricoesPendentes, usersInscricoes]);
+  }, [inscricoesPendentes, inscricoesConcluidas, usersInscricoes]);
 
   const handleUserFieldsChange = (uid: string, newFields: Partial<IUserWithId>) => {
     setUsersFieldsArray((prev) => prev.map((user) => (user.uid === uid ? { ...user, ...newFields } : user)));
@@ -153,12 +189,12 @@ const ExecutarTab = () => {
     <Container>
       <Modal title="Tem certeza que deseja excluir?" closable={{ "aria-label": "Custom Close Button" }} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         {users
-          .filter((usuario) => usuario.id == selectedInscricao?.id)
+          .filter((usuario) => usuario.id === selectedInscricao?.id)
           .map((item) => (
-            <>
+            <div key={item.id}>
               <p>Usuário: {item.nome}</p>
               <p>Cargo: {selectedInscricao?.cargo.toLocaleUpperCase()}</p>
-            </>
+            </div>
           ))}
       </Modal>
 

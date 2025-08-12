@@ -10,9 +10,9 @@ export const ContainerUsers = styled.div`
 
   overflow-y: auto;
 
-  gap: 5px;
+  gap: 15px;
   display: flex;
-  flex-flow: column;
+  flex-flow: row;
 `;
 
 export const ContainerButtons = styled.div`

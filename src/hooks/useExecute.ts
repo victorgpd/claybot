@@ -43,7 +43,9 @@ export const useExecute = () => {
 
       const inscricoesPendentes: string[] = [...new Set(data.filter((item: IUserWithCargos) => item.status === "pendente").map((item: IUserWithCargo) => item.cargo.toLowerCase()))] as string[];
 
-      const inscricoesConcluidas: string[] = [...new Set(data.filter((item: IUserWithCargos) => item.status === "concluido").map((item: IUserWithCargo) => item.cargo.toLowerCase()))] as string[];
+      const inscricoesConcluidas: string[] = [
+        ...new Set(data.filter((item: IUserWithCargos) => item.status === "concluida" || item.status === "concluido").map((item: IUserWithCargo) => item.cargo.toLowerCase())),
+      ] as string[];
 
       dispatch(setUsersInscricoes(inscricoesUsuarios));
       dispatch(setInscricoesPendentes(inscricoesPendentes));
@@ -95,5 +97,44 @@ export const useExecute = () => {
     setLoading(false);
   };
 
-  return { loading, searchInscricoes, saveInscricoes, searchUsers, deleteInscricao };
+  const updateLink = async (value: string) => {
+    setLoading(true);
+
+    try {
+      await axios.post(`${linkApi}/api/link`, { link: value });
+    } catch {
+      console.error();
+    }
+
+    setLoading(false);
+  };
+
+  const updateContatoName = async (value: string) => {
+    setLoading(true);
+
+    try {
+      await axios.post(`${linkApi}/api/contatos?contatoPayload=${value}`);
+    } catch {
+      console.error();
+    }
+
+    setLoading(false);
+  };
+
+  const deleteAllInscricoes = async () => {
+    setLoading(true);
+
+    try {
+      await axios.get(`${linkApi}/api/inscricoes/delete`);
+
+      await searchInscricoes();
+      notification.success("Todas inscrições deletadas!");
+    } catch {
+      console.error();
+    }
+
+    setLoading(false);
+  };
+
+  return { loading, searchInscricoes, updateLink, updateContatoName, saveInscricoes, searchUsers, deleteInscricao, deleteAllInscricoes };
 };

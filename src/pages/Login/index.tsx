@@ -25,7 +25,7 @@ const Login = () => {
     formState: { errors },
   } = useForm<LoginFormData>();
 
-  const { login } = useAuth(navigate);
+  const { login, loading } = useAuth(navigate);
 
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
 
@@ -75,7 +75,7 @@ const Login = () => {
           />
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" block aria-label="Entrar">
+            <Button type="primary" htmlType="submit" block aria-label="Entrar" loading={loading}>
               Entrar
             </Button>
           </Form.Item>
