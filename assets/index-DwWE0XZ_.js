@@ -2615,7 +2615,7 @@ SPDX-License-Identifier: Apache-2.0
 `,sw=({title:e,children:t})=>dt.jsxs(pde,{children:[dt.jsx(vde,{children:e}),t]}),yde=ur.div`
   flex: 0 0 auto;
 
-  width: 280px;
+  width: 250px;
 
   gap: 10px;
   display: flex;
