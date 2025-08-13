@@ -10,7 +10,7 @@ export const ContainerUsers = styled.div`
 
   overflow-y: auto;
 
-  gap: 155px;
+  gap: 15px;
   display: flex;
   flex-flow: row;
 `;

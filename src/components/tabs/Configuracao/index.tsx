@@ -18,6 +18,7 @@ const ConfiguracaoTab = () => {
   const [form, setForm] = useState("");
   const [apiUrl, setApiUrl] = useState("");
   const [disabled, setDisabled] = useState(false);
+  const [contatoName, setContatoName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -30,6 +31,9 @@ const ConfiguracaoTab = () => {
 
     const formStorage = getFromLocalStorage("form");
     setForm(formStorage);
+
+    const contatoStorage = getFromLocalStorage("contato");
+    setContatoName(contatoStorage);
   }, []);
 
   const handleSave = () => {
@@ -50,6 +54,8 @@ const ConfiguracaoTab = () => {
 
   const handleChange2 = (value: string) => {
     updateContatoName(value);
+    setToLocalStorage("contato", value);
+    setContatoName(value);
   };
 
   const handleOk = () => {
@@ -95,11 +101,12 @@ const ConfiguracaoTab = () => {
                   ]}
                 />
               </ContainerInput>
-              <span style={{ fontWeight: 500 }}>Link do formulario</span>
+              <span style={{ fontWeight: 500 }}>Selecionar contato</span>
               <ContainerInput>
                 <Select
                   style={{ width: 250 }}
                   onChange={handleChange2}
+                  value={contatoName}
                   options={[
                     { value: "gigroup", label: "GiGroup" },
                     { value: "eu", label: "Eu" },

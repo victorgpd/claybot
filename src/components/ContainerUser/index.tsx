@@ -1,8 +1,10 @@
+import dayjs from "dayjs";
 import styled from "styled-components";
 import type { IUserWithCargos } from "../../enums/types";
 
 import { Input, Select, Button } from "antd";
 import { useAppSelector } from "../../redux/hooks";
+import { useMemo } from "react";
 
 const ContainerUser = styled.div`
   flex: 0 0 auto;
@@ -25,6 +27,8 @@ const ContainerUser = styled.div`
 `;
 
 const InputFormated = styled(Input)`
+  flex: 0 0;
+
   width: 100%;
 `;
 
@@ -63,6 +67,59 @@ const UserContainer = ({ userFields, options, selectedUserIds, onUserFieldsChang
     onUserFieldsChange({ [field]: value });
   };
 
+  const gerarCargosMesAtual = () => {
+    const hoje = dayjs();
+    const ano = hoje.year();
+    const mes = hoje.month();
+    const diasNoMes = hoje.daysInMonth();
+    const diaAtual = hoje.date();
+
+    const lista: { label: string; value: string }[] = [];
+
+    for (let dia = diaAtual; dia <= diasNoMes; dia++) {
+      const data = dayjs(new Date(ano, mes, dia)).format("DD/MM");
+      lista.push({
+        label: `soc t3 - ${data}`,
+        value: `soc t3 - ${data}`,
+      });
+    }
+
+    return lista;
+  };
+
+  const cargosMesAtual = gerarCargosMesAtual();
+
+  const combinedOptions = useMemo(() => {
+    const allOptions = [...options, ...cargosMesAtual];
+    const uniqueOptionsMap = new Map<string, { label: string; value: string }>();
+    allOptions.forEach((opt) => {
+      if (!uniqueOptionsMap.has(opt.value)) {
+        uniqueOptionsMap.set(opt.value, opt);
+      }
+    });
+
+    const uniqueOptions = Array.from(uniqueOptionsMap.values());
+
+    uniqueOptions.sort((a, b) => {
+      const regex = /(\d{2}\/\d{2})$/;
+      const matchA = a.value.match(regex);
+      const matchB = b.value.match(regex);
+
+      if (!matchA && !matchB) return 0;
+      if (!matchA) return 1;
+      if (!matchB) return -1;
+
+      const anoAtual = dayjs().year();
+
+      const dateA = dayjs(matchA[1], "DD/MM").year(anoAtual);
+      const dateB = dayjs(matchB[1], "DD/MM").year(anoAtual);
+
+      return dateA.isBefore(dateB) ? -1 : dateA.isAfter(dateB) ? 1 : 0;
+    });
+
+    return uniqueOptions;
+  }, [options, cargosMesAtual]);
+
   return (
     <ContainerUser>
       <Select
@@ -77,7 +134,7 @@ const UserContainer = ({ userFields, options, selectedUserIds, onUserFieldsChang
             value: user.id,
             label: `${user.nome} (${user.cpf})`,
           }))}
-        style={{ width: "100%" }}
+        style={{ width: "100%", flex: "0 0" }}
       />
 
       <InputFormated placeholder="Nome" value={userFields.nome} onChange={(e) => onInputChange("nome", e.target.value)} disabled={userFields.id ? true : false} />
@@ -86,7 +143,18 @@ const UserContainer = ({ userFields, options, selectedUserIds, onUserFieldsChang
       <InputFormated placeholder="Gênero" value={userFields.genero} onChange={(e) => onInputChange("genero", e.target.value)} disabled={userFields.id ? true : false} />
       <InputFormated placeholder="Email" value={userFields.email} onChange={(e) => onInputChange("email", e.target.value)} disabled={userFields.id ? true : false} />
 
-      <Select mode="tags" allowClear placeholder={`Cargos`} value={userFields.cargos} onChange={onCargosChange} options={options} style={{ width: "100%" }} />
+      <Select
+        mode="tags"
+        allowClear
+        placeholder={`Cargos`}
+        value={userFields.cargos}
+        onChange={(values) => {
+          const uniqueValues = Array.from(new Set(values));
+          onCargosChange(uniqueValues);
+        }}
+        options={combinedOptions}
+        style={{ width: "100%", flex: "0 0" }}
+      />
 
       <Button danger onClick={onDelete} style={{ flex: "none" }}>
         Remover

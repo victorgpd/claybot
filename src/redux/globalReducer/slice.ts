@@ -1,15 +1,15 @@
-import type { IAuthUser, IUserWithCargo, IUserWithId } from "../../enums/types";
-
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { IAuthUser, ILog, IUserWithCargoId, IUserWithId } from "../../enums/types";
 
 interface initialStateType {
   user: IAuthUser | null;
   users: IUserWithId[];
-  usersInscricoes: IUserWithCargo[];
+  usersInscricoes: IUserWithCargoId[];
 
   inscricoesPendentes: string[];
   inscricoesConcluidas: string[];
 
+  logs: ILog[];
   linkApi: string;
 }
 
@@ -38,6 +38,7 @@ const initialState: initialStateType = {
   inscricoesPendentes: [],
   inscricoesConcluidas: [],
 
+  logs: [],
   linkApi: "",
 };
 
@@ -57,7 +58,7 @@ const globalSlice = createSlice({
     setLinkApi: (state, action: PayloadAction<string>) => {
       state.linkApi = action.payload;
     },
-    setUsersInscricoes: (state, action: PayloadAction<IUserWithCargo[]>) => {
+    setUsersInscricoes: (state, action: PayloadAction<IUserWithCargoId[]>) => {
       state.usersInscricoes = action.payload;
     },
     setInscricoesPendentes: (state, action: PayloadAction<string[]>) => {
@@ -66,8 +67,11 @@ const globalSlice = createSlice({
     setInscricoesConcluidas: (state, action: PayloadAction<string[]>) => {
       state.inscricoesConcluidas = action.payload;
     },
+    setLogs: (state, action: PayloadAction<ILog[]>) => {
+      state.logs = action.payload;
+    },
   },
 });
 
 export const globalReducer = globalSlice.reducer;
-export const { setUser, clearUser, setUsers, setLinkApi, setUsersInscricoes, setInscricoesPendentes, setInscricoesConcluidas } = globalSlice.actions;
+export const { setUser, clearUser, setLogs, setUsers, setLinkApi, setUsersInscricoes, setInscricoesPendentes, setInscricoesConcluidas } = globalSlice.actions;

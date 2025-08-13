@@ -20,7 +20,18 @@ export interface IUserWithCargo extends IUser {
   status: string;
 }
 
+export interface IUserWithCargoId extends IUserWithId {
+  cargo: string;
+  status: string;
+}
+
 export interface IAuthUser {
   uid?: string;
   email: string;
+}
+
+export interface ILog {
+  asctime: string;
+  levelname: string;
+  message: string;
 }

@@ -47,7 +47,19 @@ const ExecutarTab = () => {
 
   useEffect(() => {
     if (inscricoesPendentes.length || inscricoesConcluidas.length) {
-      const cargosUnicos = Array.from(new Set([...inscricoesPendentes, ...inscricoesConcluidas].map((cargo) => cargo.toLowerCase())));
+      const cargosUnicos = Array.from(new Set([...inscricoesPendentes, ...inscricoesConcluidas])).sort((a, b) => {
+        const regex = /(\d{2})\/(\d{2})$/;
+        const [, diaA, mesA] = a.match(regex) || [];
+        const [, diaB, mesB] = b.match(regex) || [];
+
+        if (!diaA || !mesA) return 1;
+        if (!diaB || !mesB) return -1;
+
+        const dataA = new Date(new Date().getFullYear(), parseInt(mesA) - 1, parseInt(diaA));
+        const dataB = new Date(new Date().getFullYear(), parseInt(mesB) - 1, parseInt(diaB));
+
+        return dataA.getTime() - dataB.getTime();
+      });
 
       const itemsInscricoes = cargosUnicos.map((inscricao) => {
         const filteredUsers = usersInscricoes.filter((user) => user.cargo.toLowerCase() === inscricao);
@@ -110,7 +122,7 @@ const ExecutarTab = () => {
           key: inscricao,
           label: inscricao.toLocaleUpperCase(),
           children: (
-            <div style={{ height: "100%", overflowY: "auto" }}>
+            <div style={{ height: "100%" }}>
               <Table<IUserWithCargo> rowKey="cpf" columns={columns} dataSource={filteredUsers} pagination={{ pageSize: 12 }} />
             </div>
           ),
@@ -126,10 +138,17 @@ const ExecutarTab = () => {
   };
 
   const handleCargosChange = (uid: string, values: string[]) => {
-    const newOptions = values.filter((val) => !options.some((opt) => opt.value === val)).map((val) => ({ label: val, value: val }));
+    const uniqueValues = Array.from(new Set(values));
 
-    setOptions((prevOptions) => [...prevOptions, ...newOptions]);
-    handleUserFieldsChange(uid, { cargos: values });
+    const newOptions = uniqueValues.filter((val) => !options.some((opt) => opt.value === val)).map((val) => ({ label: val, value: val }));
+
+    setOptions((prevOptions) => {
+      const combined = [...prevOptions, ...newOptions];
+      const uniqueCombined = combined.filter((opt, index) => combined.findIndex((o) => o.value === opt.value) === index);
+      return uniqueCombined;
+    });
+
+    handleUserFieldsChange(uid, { cargos: uniqueValues });
   };
 
   const handleDeleteUser = (uidToDelete: string) => {
@@ -198,7 +217,7 @@ const ExecutarTab = () => {
           ))}
       </Modal>
 
-      <Card title="Inscrições pendentes">
+      <Card title="Inscrições pendentes" minHeightProp="560px">
         <Tabs type="card" items={items} />
       </Card>
 
