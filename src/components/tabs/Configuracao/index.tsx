@@ -101,12 +101,11 @@ const ConfiguracaoTab = () => {
                   ]}
                 />
               </ContainerInput>
-              <span style={{ fontWeight: 500 }}>Selecionar contato</span>
+              <span style={{ fontWeight: 500 }}>Selecionar contato ({contatoName})</span>
               <ContainerInput>
                 <Select
                   style={{ width: 250 }}
                   onChange={handleChange2}
-                  value={contatoName}
                   options={[
                     { value: "gigroup", label: "GiGroup" },
                     { value: "eu", label: "Eu" },
