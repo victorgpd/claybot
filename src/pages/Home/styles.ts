@@ -9,6 +9,15 @@ export const PageContainer = styled.div`
   display: flex;
 `;
 
+export const ContainerTabs = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+
+  display: flex;
+`;
+
 export const Tabs = styled(TabsAntd)`
   width: 100%;
   height: 100%;
@@ -19,5 +28,15 @@ export const Tabs = styled(TabsAntd)`
   .ant-tabs-tabpane-active {
     width: 100%;
     height: 100%;
+  }
+
+  .ant-tabs-nav-list {
+    overflow-x: auto !important;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+
+  .ant-tabs-nav-list::-webkit-scrollbar {
+    display: none;
   }
 `;

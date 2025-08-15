@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { type TabsProps } from "antd";
 import { PageContainer, Tabs } from "./styles";
 import ExecutarTab from "../../components/tabs/Executar";
-// import { useExecute } from "../../hooks/useExecute";
 import ConfiguracaoTab from "../../components/tabs/Configuracao";
 import { getFromLocalStorage, setToLocalStorage } from "../../utils/localStorage";
 import { useAppDispatch } from "../../redux/hooks";

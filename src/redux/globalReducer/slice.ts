@@ -6,6 +6,7 @@ interface initialStateType {
   users: IUserWithId[];
   usersInscricoes: IUserWithCargoId[];
 
+  inscricoesErro: string[];
   inscricoesPendentes: string[];
   inscricoesConcluidas: string[];
 
@@ -35,6 +36,7 @@ const initialState: initialStateType = {
   ],
 
   usersInscricoes: [],
+  inscricoesErro: [],
   inscricoesPendentes: [],
   inscricoesConcluidas: [],
 
@@ -64,6 +66,9 @@ const globalSlice = createSlice({
     setInscricoesPendentes: (state, action: PayloadAction<string[]>) => {
       state.inscricoesPendentes = action.payload;
     },
+    setInscricoesErro: (state, action: PayloadAction<string[]>) => {
+      state.inscricoesErro = action.payload;
+    },
     setInscricoesConcluidas: (state, action: PayloadAction<string[]>) => {
       state.inscricoesConcluidas = action.payload;
     },
@@ -74,4 +79,4 @@ const globalSlice = createSlice({
 });
 
 export const globalReducer = globalSlice.reducer;
-export const { setUser, clearUser, setLogs, setUsers, setLinkApi, setUsersInscricoes, setInscricoesPendentes, setInscricoesConcluidas } = globalSlice.actions;
+export const { setUser, clearUser, setLogs, setUsers, setLinkApi, setUsersInscricoes, setInscricoesErro, setInscricoesPendentes, setInscricoesConcluidas } = globalSlice.actions;

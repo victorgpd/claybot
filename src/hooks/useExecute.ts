@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { setInscricoesConcluidas, setInscricoesPendentes, setLogs, setUsers, setUsersInscricoes } from "../redux/globalReducer/slice";
+import { setInscricoesConcluidas, setInscricoesErro, setInscricoesPendentes, setLogs, setUsers, setUsersInscricoes } from "../redux/globalReducer/slice";
 import type { IUser, IUserWithCargo, IUserWithCargos } from "../enums/types";
 import { useNotification } from "./useNotification";
 
@@ -41,6 +41,8 @@ export const useExecute = () => {
 
       const inscricoesUsuarios = data;
 
+      const inscricoesErro: string[] = [...new Set(data.filter((item: IUserWithCargos) => item.status === "erro").map((item: IUserWithCargo) => item.cargo.toLowerCase()))] as string[];
+
       const inscricoesPendentes: string[] = [...new Set(data.filter((item: IUserWithCargos) => item.status === "pendente").map((item: IUserWithCargo) => item.cargo.toLowerCase()))] as string[];
 
       const inscricoesConcluidas: string[] = [
@@ -48,6 +50,7 @@ export const useExecute = () => {
       ] as string[];
 
       dispatch(setUsersInscricoes(inscricoesUsuarios));
+      dispatch(setInscricoesErro(inscricoesErro));
       dispatch(setInscricoesPendentes(inscricoesPendentes));
       dispatch(setInscricoesConcluidas(inscricoesConcluidas));
     } catch (error: unknown) {

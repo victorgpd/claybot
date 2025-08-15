@@ -4,8 +4,8 @@ import type { IUserWithCargo, IUserWithCargos } from "../../../enums/types";
 
 import { v4 as uuidv4 } from "uuid";
 import { Container } from "../styles";
-import { useEffect, useState } from "react";
-import { Tabs } from "../../../pages/Home/styles";
+import { useEffect, useRef, useState } from "react";
+import { ContainerTabs, Tabs } from "../../../pages/Home/styles";
 import { Button, Modal, Table, type TabsProps } from "antd";
 import { useAppSelector } from "../../../redux/hooks";
 import { ButtonsTable, ContainerButtons, ContainerButtonsTable, ContainerUsers } from "./styles";
@@ -20,9 +20,11 @@ interface IUserWithId extends IUserWithCargos {
 }
 
 const ExecutarTab = () => {
+  const tabsRef = useRef<HTMLDivElement>(null);
+
   const { saveInscricoes, loading, deleteInscricao } = useExecute();
 
-  const { inscricoesPendentes = [], inscricoesConcluidas = [], usersInscricoes = [], users = [] } = useAppSelector((state) => state.globalReducer);
+  const { usersInscricoes = [], users = [] } = useAppSelector((state) => state.globalReducer);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInscricao, setSelectedInscricao] = useState<{ id: number; cargo: string } | null>(null);
@@ -46,14 +48,20 @@ const ExecutarTab = () => {
   const [items, setItems] = useState<TabsProps["items"]>([]);
 
   useEffect(() => {
-    if (inscricoesPendentes.length || inscricoesConcluidas.length) {
-      const cargosUnicos = Array.from(new Set([...inscricoesPendentes, ...inscricoesConcluidas])).sort((a, b) => {
-        const regex = /(\d{2})\/(\d{2})$/;
-        const [, diaA, mesA] = a.match(regex) || [];
-        const [, diaB, mesB] = b.match(regex) || [];
+    if (usersInscricoes.length) {
+      const cargosUnicosSet = new Set(usersInscricoes.map((u) => u.cargo.toLowerCase()));
+      const cargosUnicos = Array.from(cargosUnicosSet);
 
-        if (!diaA || !mesA) return 1;
-        if (!diaB || !mesB) return -1;
+      cargosUnicos.sort((a, b) => {
+        const regex = /(\d{2})\/(\d{2})/;
+        const matchA = a.match(regex);
+        const matchB = b.match(regex);
+
+        if (!matchA) return 1;
+        if (!matchB) return -1;
+
+        const [, diaA, mesA] = matchA;
+        const [, diaB, mesB] = matchB;
 
         const dataA = new Date(new Date().getFullYear(), parseInt(mesA) - 1, parseInt(diaA));
         const dataB = new Date(new Date().getFullYear(), parseInt(mesB) - 1, parseInt(diaB));
@@ -99,11 +107,7 @@ const ExecutarTab = () => {
               return <span style={{ color }}>{record.status}</span>;
             },
           },
-          {
-            title: "Cargo",
-            key: "cargo",
-            render: () => inscricao.toLocaleUpperCase(),
-          },
+          { title: "Cargo", key: "cargo", render: () => inscricao.toLocaleUpperCase() },
           {
             title: "Ações",
             key: "action",
@@ -123,7 +127,7 @@ const ExecutarTab = () => {
           label: inscricao.toLocaleUpperCase(),
           children: (
             <div style={{ height: "100%" }}>
-              <Table<IUserWithCargo> rowKey="cpf" columns={columns} dataSource={filteredUsers} pagination={{ pageSize: 12 }} />
+              <Table<IUserWithCargo> rowKey="cpf" columns={columns} dataSource={filteredUsers} pagination={{ pageSize: 5 }} />
             </div>
           ),
         };
@@ -131,7 +135,45 @@ const ExecutarTab = () => {
 
       setItems(itemsInscricoes);
     }
-  }, [inscricoesPendentes, inscricoesConcluidas, usersInscricoes]);
+  }, [usersInscricoes]);
+
+  useEffect(() => {
+    const container = tabsRef.current?.querySelector(".ant-tabs-nav-list") as HTMLElement;
+    if (!container) return;
+
+    let startX = 0;
+    let scrollLeft = 0;
+    let startY = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      startX = e.touches[0].pageX - container.offsetLeft;
+      startY = e.touches[0].pageY - container.offsetTop;
+      scrollLeft = container.scrollLeft;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const x = e.touches[0].pageX - container.offsetLeft;
+      const y = e.touches[0].pageY - container.offsetTop;
+      const dx = Math.abs(x - startX);
+      const dy = Math.abs(y - startY);
+
+      if (dx > dy) {
+        if (e.cancelable) {
+          e.preventDefault();
+        }
+        e.stopPropagation();
+        container.scrollLeft = scrollLeft - (x - startX);
+      }
+    };
+
+    container.addEventListener("touchstart", handleTouchStart, { passive: true });
+    container.addEventListener("touchmove", handleTouchMove, { passive: false });
+
+    return () => {
+      container.removeEventListener("touchstart", handleTouchStart);
+      container.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, []);
 
   const handleUserFieldsChange = (uid: string, newFields: Partial<IUserWithId>) => {
     setUsersFieldsArray((prev) => prev.map((user) => (user.uid === uid ? { ...user, ...newFields } : user)));
@@ -217,8 +259,10 @@ const ExecutarTab = () => {
           ))}
       </Modal>
 
-      <Card title="Inscrições pendentes" minHeightProp="560px">
-        <Tabs type="card" items={items} />
+      <Card title="Inscrições pendentes" minHeightProp="575px">
+        <ContainerTabs ref={tabsRef}>
+          <Tabs type="card" items={items} />
+        </ContainerTabs>
       </Card>
 
       <Card title="Adicionar usuários à inscrição!">
