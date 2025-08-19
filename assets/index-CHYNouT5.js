@@ -2584,9 +2584,12 @@ SPDX-License-Identifier: Apache-2.0
   justify-content: space-between;
 
   z-index: 999;
+
+  position: fixed;
 `,_de=Nn.main`
   flex: 1;
   padding: 16px;
+  padding-top: 90px;
   background-color: #fff;
 `,Ode=Nn.div`
   width: 100%;
