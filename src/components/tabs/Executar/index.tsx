@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { ContainerTabs, Tabs } from "../../../pages/Home/styles";
 import { Button, Modal, Table, type TabsProps } from "antd";
 import { useAppSelector } from "../../../redux/hooks";
-import { ButtonsTable, ContainerButtons, ContainerButtonsTable, ContainerUsers } from "./styles";
+import { ButtonsTable, ContainerButtons, ContainerButtonsTable, ContainerTable, ContainerUsers } from "./styles";
 import { useExecute } from "../../../hooks/useExecute";
 import { DeleteOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
@@ -22,9 +22,9 @@ interface IUserWithId extends IUserWithCargos {
 const ExecutarTab = () => {
   const tabsRef = useRef<HTMLDivElement>(null);
 
-  const { saveInscricoes, loading, deleteInscricao } = useExecute();
+  const { saveInscricoes, loading, deleteInscricao, deleteAllInscricoesCargo } = useExecute();
 
-  const { usersInscricoes = [], users = [] } = useAppSelector((state) => state.globalReducer);
+  const { usersInscricoes = [], users = [], user } = useAppSelector((state) => state.globalReducer);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInscricao, setSelectedInscricao] = useState<{ id: number; cargo: string } | null>(null);
@@ -113,10 +113,12 @@ const ExecutarTab = () => {
             key: "action",
             render: (_: unknown, record: IUserWithCargo & Partial<IUserWithId>) => (
               <ContainerButtonsTable>
-                <ButtonsTable color="danger" variant="outlined" onClick={() => showModal({ id: record.id!, cargo: record.cargo })}>
-                  <DeleteOutlined />
-                  <span>Excluir</span>
-                </ButtonsTable>
+                {user?.email.includes(record.email) && (
+                  <ButtonsTable color="danger" variant="outlined" onClick={() => showModal({ id: record.id!, cargo: record.cargo })}>
+                    <DeleteOutlined />
+                    <span>Excluir</span>
+                  </ButtonsTable>
+                )}
               </ContainerButtonsTable>
             ),
           },
@@ -126,16 +128,27 @@ const ExecutarTab = () => {
           key: inscricao,
           label: inscricao.toLocaleUpperCase(),
           children: (
-            <div style={{ height: "100%" }}>
+            <ContainerTable>
+              {user?.email?.includes("victor") && (
+                <Button
+                  style={{ flex: "0 0 auto", width: "120px", position: "absolute", zIndex: "1000", right: "39px", top: "-55px" }}
+                  variant="outlined"
+                  color="danger"
+                  icon={<DeleteOutlined />}
+                  onClick={() => deleteAllInscricoesCargo(inscricao)}
+                >
+                  Excluir tudo
+                </Button>
+              )}
               <Table<IUserWithCargo> rowKey="cpf" columns={columns} dataSource={filteredUsers} pagination={{ pageSize: 5 }} />
-            </div>
+            </ContainerTable>
           ),
         };
       });
 
       setItems(itemsInscricoes);
     }
-  }, [usersInscricoes]);
+  }, [usersInscricoes, user]);
 
   useEffect(() => {
     const container = tabsRef.current?.querySelector(".ant-tabs-nav-list") as HTMLElement;
@@ -259,13 +272,13 @@ const ExecutarTab = () => {
           ))}
       </Modal>
 
-      <Card title="Inscrições pendentes" minHeightProp="575px">
+      <Card title="Inscrições pendentes" minHeightProp="620px">
         <ContainerTabs ref={tabsRef}>
           <Tabs type="card" items={items} />
         </ContainerTabs>
       </Card>
 
-      <Card title="Adicionar usuários à inscrição!">
+      <Card title="Adicionar usuários à inscrição!" minHeightProp="580px">
         <ContainerUsers>
           {usersFieldsArray.map(({ uid, id, ...userFields }) => (
             <UserContainer

@@ -1,6 +1,6 @@
 import Card from "../../Card";
 import { Container } from "../styles";
-import { ContainerForm, ContainerInput } from "./styles";
+import { ContainerForm, ContainerInput, ContainerStatus } from "./styles";
 import { useEffect, useState } from "react";
 import { Button, Input, Modal, Select } from "antd";
 import { getFromLocalStorage, setToLocalStorage } from "../../../utils/localStorage";
@@ -13,24 +13,23 @@ const ConfiguracaoTab = () => {
   const notification = useNotification();
 
   const { user } = useAppSelector((state) => state.globalReducer);
-  const { updateLink, updateContatoName, deleteAllInscricoes } = useExecute();
+  const { updateContatoName, deleteAllInscricoes, statusApi } = useExecute();
 
-  const [form, setForm] = useState("");
+  const [data, setData] = useState<{ driverAtivo: string }>();
+
   const [apiUrl, setApiUrl] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [contatoName, setContatoName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
+    statusApi(setData);
     const link = getFromLocalStorage("linkApi");
     setApiUrl(link);
 
     if (link) {
       setDisabled(true);
     }
-
-    const formStorage = getFromLocalStorage("form");
-    setForm(formStorage);
 
     const contatoStorage = getFromLocalStorage("contato");
     setContatoName(contatoStorage);
@@ -44,12 +43,6 @@ const ConfiguracaoTab = () => {
 
   const handleEdit = () => {
     setDisabled(!disabled);
-  };
-
-  const handleChange = (value: string) => {
-    updateLink(value);
-    setToLocalStorage("form", value);
-    setForm(value);
   };
 
   const handleChange2 = (value: string) => {
@@ -89,18 +82,6 @@ const ConfiguracaoTab = () => {
 
           {user?.email?.includes("victor") && (
             <>
-              <span style={{ fontWeight: 500 }}>Link do formulario</span>
-              <ContainerInput>
-                <Select
-                  style={{ width: 250 }}
-                  onChange={handleChange}
-                  value={form}
-                  options={[
-                    { value: "https://forms.office.com/e/1wLWvYR8kS", label: "Formulário real" },
-                    { value: "https://forms.cloud.microsoft/r/Cm6N0frFC8", label: "Formulário teste" },
-                  ]}
-                />
-              </ContainerInput>
               <span style={{ fontWeight: 500 }}>Selecionar contato ({contatoName})</span>
               <ContainerInput>
                 <Select
@@ -112,17 +93,30 @@ const ConfiguracaoTab = () => {
                   ]}
                 />
               </ContainerInput>
-
-              <Button variant="solid" onClick={handleShowModal} style={{ width: "150px" }} icon={<DeleteOutlined />} color="danger">
-                Apagar inscrições
-              </Button>
             </>
           )}
 
-          <Button type="primary" onClick={handleSave} style={{ width: "100px" }} icon={<SaveOutlined />}>
-            Salvar
-          </Button>
+          <ContainerInput>
+            <Button type="primary" onClick={handleSave} style={{ width: "100px" }} icon={<SaveOutlined />}>
+              Salvar
+            </Button>
+
+            {user?.email?.includes("victor") && (
+              <Button variant="solid" onClick={handleShowModal} style={{ width: "150px" }} icon={<DeleteOutlined />} color="danger">
+                Apagar inscrições
+              </Button>
+            )}
+          </ContainerInput>
         </ContainerForm>
+
+        {/* <ContainerStatus>
+          <h2>Status robô</h2>
+
+          <p>Lendo mensagens: {data?.driverAtivo}</p>
+          <p></p>
+          <p></p>
+          <p></p>
+        </ContainerStatus> */}
       </Card>
     </Container>
   );

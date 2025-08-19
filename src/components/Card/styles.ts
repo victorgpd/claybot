@@ -14,7 +14,7 @@ export const ContainerCard = styled.div<{ $minHeightProp?: string }>`
   gap: 12px;
   display: flex;
   flex-flow: column;
-  justify-content: space-around;
+  justify-content: flex-start;
 `;
 
 export const TitleCard = styled.h2`

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, type Dispatch } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setInscricoesConcluidas, setInscricoesErro, setInscricoesPendentes, setLogs, setUsers, setUsersInscricoes } from "../redux/globalReducer/slice";
 import type { IUser, IUserWithCargo, IUserWithCargos } from "../enums/types";
@@ -134,11 +134,36 @@ export const useExecute = () => {
     setLoading(false);
   };
 
-  const updateLink = async (value: string) => {
+  const deleteAllInscricoesCargo = async (cargo: string) => {
     setLoading(true);
 
     try {
-      await axios.post(`${linkApi}/api/link`, { link: value });
+      await axios.delete(`${linkApi}/api/inscricoes/cargo`, { data: { cargo: cargo } });
+
+      notification.success("Inscrição excluida com sucesso!");
+    } catch {
+      notification.error("Erro ao excluir usuário!");
+    }
+
+    setLoading(false);
+  };
+
+  const statusApi = async (
+    setData: Dispatch<
+      React.SetStateAction<
+        | {
+            driverAtivo: string;
+          }
+        | undefined
+      >
+    >
+  ) => {
+    setLoading(true);
+
+    try {
+      const { data } = await axios.get(`${linkApi}/api/status`);
+
+      setData(data);
     } catch {
       console.error();
     }
@@ -195,5 +220,5 @@ export const useExecute = () => {
     }
   };
 
-  return { loading, createUser, searchLogs, searchInscricoes, updateLink, updateContatoName, saveInscricoes, searchUsers, deleteInscricao, deleteAllInscricoes };
+  return { loading, createUser, searchLogs, searchInscricoes, statusApi, updateContatoName, saveInscricoes, searchUsers, deleteInscricao, deleteAllInscricoes, deleteAllInscricoesCargo };
 };

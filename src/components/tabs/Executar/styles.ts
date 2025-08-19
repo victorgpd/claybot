@@ -10,7 +10,7 @@ export const ContainerUsers = styled.div`
 
   overflow-y: auto;
 
-  gap: 155px;
+  gap: 15px;
   display: flex;
   flex-flow: row;
 `;
@@ -32,4 +32,14 @@ export const ButtonsTable = styled(Button)`
   svg {
     font-size: 16px;
   }
+`;
+
+export const ContainerTable = styled.div`
+  height: 100%;
+
+  gap: 10px;
+  display: flex;
+  flex-flow: column;
+
+  position: relative;
 `;

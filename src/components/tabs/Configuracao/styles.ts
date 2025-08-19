@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const ContainerForm = styled.div`
   width: 100%;
   max-width: 768px;
-  height: 100%;
   padding-top: 14px;
 
   gap: 12px;
@@ -16,4 +15,13 @@ export const ContainerInput = styled.div`
 
   gap: 12px;
   display: flex;
+`;
+
+export const ContainerStatus = styled.div`
+  width: 100%;
+  margin-top: 120px;
+
+  & > h2 {
+    font-size: 20px;
+  }
 `;

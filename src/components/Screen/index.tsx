@@ -1,18 +1,22 @@
-import { Spin } from "antd";
+import Isologo from "../../assets/isologo.png";
+
+import { Button, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { auth } from "../../services/firebase";
-import { ContainerPage, Main } from "./styles";
+import { ContainerPage, Header, Main } from "./styles";
 import { RoutesEnum } from "../../enums/enums";
 import { onAuthStateChanged } from "firebase/auth";
 import { useAppDispatch } from "../../redux/hooks";
-import { LoadingOutlined } from "@ant-design/icons";
+import { LoadingOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Outlet, useNavigate } from "react-router-dom";
 import { clearUser, setUser } from "../../redux/globalReducer/slice";
+import { useAuth } from "../../hooks/useAuth";
 
 const Screen = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const { logout } = useAuth(navigate);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -48,6 +52,14 @@ const Screen = () => {
 
   return (
     <>
+      <Header>
+        <img src={Isologo} alt="Logo da aplicação" />
+
+        <Button type="text" variant="text" color="danger" icon={<LogoutOutlined />} onClick={logout}>
+          Sair
+        </Button>
+      </Header>
+
       <Main>
         {loading ? (
           <ContainerPage>
