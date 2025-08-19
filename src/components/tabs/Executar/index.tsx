@@ -113,12 +113,10 @@ const ExecutarTab = () => {
             key: "action",
             render: (_: unknown, record: IUserWithCargo & Partial<IUserWithId>) => (
               <ContainerButtonsTable>
-                {user?.email.includes(record.email) && (
-                  <ButtonsTable color="danger" variant="outlined" onClick={() => showModal({ id: record.id!, cargo: record.cargo })}>
-                    <DeleteOutlined />
-                    <span>Excluir</span>
-                  </ButtonsTable>
-                )}
+                <ButtonsTable color="danger" variant="outlined" onClick={() => showModal({ id: record.id!, cargo: record.cargo })}>
+                  <DeleteOutlined />
+                  <span>Excluir</span>
+                </ButtonsTable>
               </ContainerButtonsTable>
             ),
           },
@@ -129,18 +127,12 @@ const ExecutarTab = () => {
           label: inscricao.toLocaleUpperCase(),
           children: (
             <ContainerTable>
+              <Table<IUserWithCargo> rowKey="cpf" columns={columns} dataSource={filteredUsers} pagination={{ pageSize: 5 }} />
               {user?.email?.includes("victor") && (
-                <Button
-                  style={{ flex: "0 0 auto", width: "120px", position: "absolute", zIndex: "1000", right: "39px", top: "-55px" }}
-                  variant="outlined"
-                  color="danger"
-                  icon={<DeleteOutlined />}
-                  onClick={() => deleteAllInscricoesCargo(inscricao)}
-                >
+                <Button style={{ flex: "0 0 auto", width: "120px" }} variant="outlined" color="danger" icon={<DeleteOutlined />} onClick={() => deleteAllInscricoesCargo(inscricao)}>
                   Excluir tudo
                 </Button>
               )}
-              <Table<IUserWithCargo> rowKey="cpf" columns={columns} dataSource={filteredUsers} pagination={{ pageSize: 5 }} />
             </ContainerTable>
           ),
         };

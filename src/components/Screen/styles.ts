@@ -17,11 +17,14 @@ export const Header = styled.header`
   justify-content: space-between;
 
   z-index: 999;
+
+  position: fixed;
 `;
 
 export const Main = styled.main`
   flex: 1;
   padding: 16px;
+  padding-top: 90px;
   background-color: #fff;
 `;
 
