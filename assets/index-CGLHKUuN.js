@@ -2598,7 +2598,7 @@ SPDX-License-Identifier: Apache-2.0
   display: flex;
   align-items: center;
   justify-content: center;
-`,N5=()=>{const e=Av(),t=sm(),{logout:n}=I5(e),[r,o]=d.useState(!0);return d.useEffect(()=>{o(!0);const a=bse(_p,l=>{const c=location.pathname,u=c==="/login",f=c!=="/login";l?(t(gw({uid:l.uid,email:l.email??""})),u&&e(ic.Home,{replace:!0})):(t(E5()),f&&e(ic.Login,{replace:!0}))});return o(!1),()=>a()},[location.pathname]),qe.jsxs(qe.Fragment,{children:[qe.jsxs(Rde,{children:[qe.jsx("img",{src:dC,alt:"Logo da aplicação"}),qe.jsx(br,{type:"text",variant:"text",color:"danger",icon:qe.jsx(_oe,{}),onClick:n,children:"Sair"})]}),qe.jsx(_de,{children:r?qe.jsx(Ode,{children:qe.jsx(Px,{indicator:qe.jsx(xoe,{}),size:"large"})}):qe.jsx(ok,{})})]})},Tde=Nn.div`
+`,N5=()=>{const e=Av(),t=sm(),{logout:n}=I5(e),[r,o]=d.useState(!0);return d.useEffect(()=>{o(!0);const a=bse(_p,l=>{const c=location.pathname,u=c.includes("/login"),f=!c.includes("/login");l?(t(gw({uid:l.uid,email:l.email??""})),u&&e(ic.Home,{replace:!0})):(t(E5()),f&&e(ic.Login,{replace:!0}))});return o(!1),()=>a()},[location.pathname]),qe.jsxs(qe.Fragment,{children:[qe.jsxs(Rde,{children:[qe.jsx("img",{src:dC,alt:"Logo da aplicação"}),qe.jsx(br,{type:"text",variant:"text",color:"danger",icon:qe.jsx(_oe,{}),onClick:n,children:"Sair"})]}),qe.jsx(_de,{children:r?qe.jsx(Ode,{children:qe.jsx(Px,{indicator:qe.jsx(xoe,{}),size:"large"})}):qe.jsx(ok,{})})]})},Tde=Nn.div`
   height: 100%;
 
   flex: 1;
