@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { IAuthUser, ILog, IUserWithCargoId, IUserWithId } from "../../enums/types";
+import type { IAuthUser, ILog, IStatusApi, IUserWithCargoId, IUserWithId } from "../../enums/types";
 
 interface initialStateType {
   user: IAuthUser | null;
@@ -12,6 +12,7 @@ interface initialStateType {
 
   logs: ILog[];
   linkApi: string;
+  statusApi: IStatusApi | null;
 }
 
 const initialState: initialStateType = {
@@ -42,6 +43,8 @@ const initialState: initialStateType = {
 
   logs: [],
   linkApi: "",
+
+  statusApi: null,
 };
 
 const globalSlice = createSlice({
@@ -75,8 +78,11 @@ const globalSlice = createSlice({
     setLogs: (state, action: PayloadAction<ILog[]>) => {
       state.logs = action.payload;
     },
+    setStatusApi: (state, action: PayloadAction<IStatusApi | null>) => {
+      state.statusApi = action.payload;
+    },
   },
 });
 
 export const globalReducer = globalSlice.reducer;
-export const { setUser, clearUser, setLogs, setUsers, setLinkApi, setUsersInscricoes, setInscricoesErro, setInscricoesPendentes, setInscricoesConcluidas } = globalSlice.actions;
+export const { setUser, clearUser, setLogs, setUsers, setLinkApi, setStatusApi, setUsersInscricoes, setInscricoesErro, setInscricoesPendentes, setInscricoesConcluidas } = globalSlice.actions;

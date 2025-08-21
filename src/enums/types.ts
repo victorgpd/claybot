@@ -35,3 +35,10 @@ export interface ILog {
   levelname: string;
   message: string;
 }
+
+export interface IStatusApi {
+  filaCargos: string[];
+  driverAtivo: boolean;
+  inscricoesRodando: string[];
+  inscricoesPendentes: number;
+}

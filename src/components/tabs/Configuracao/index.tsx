@@ -1,11 +1,11 @@
 import Card from "../../Card";
 import { Container } from "../styles";
-import { ContainerForm, ContainerInput, ContainerStatus } from "./styles";
+import { ContainerForm, ContainerInput } from "./styles";
 import { useEffect, useState } from "react";
 import { Button, Input, Modal, Select } from "antd";
 import { getFromLocalStorage, setToLocalStorage } from "../../../utils/localStorage";
 import { useNotification } from "../../../hooks/useNotification";
-import { DeleteOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
+import { ClearOutlined, DeleteOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { useExecute } from "../../../hooks/useExecute";
 import { useAppSelector } from "../../../redux/hooks";
 
@@ -13,9 +13,7 @@ const ConfiguracaoTab = () => {
   const notification = useNotification();
 
   const { user } = useAppSelector((state) => state.globalReducer);
-  const { updateContatoName, deleteAllInscricoes, statusApi } = useExecute();
-
-  const [data, setData] = useState<{ driverAtivo: string }>();
+  const { updateContatoName, deleteAllInscricoes, clearLogs } = useExecute();
 
   const [apiUrl, setApiUrl] = useState("");
   const [disabled, setDisabled] = useState(false);
@@ -23,7 +21,6 @@ const ConfiguracaoTab = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    statusApi(setData);
     const link = getFromLocalStorage("linkApi");
     setApiUrl(link);
 
@@ -101,6 +98,10 @@ const ConfiguracaoTab = () => {
               Salvar
             </Button>
 
+            <Button type="primary" onClick={clearLogs} style={{ width: "120px" }} icon={<ClearOutlined />}>
+              Limpar log
+            </Button>
+
             {user?.email?.includes("victor") && (
               <Button variant="solid" onClick={handleShowModal} style={{ width: "150px" }} icon={<DeleteOutlined />} color="danger">
                 Apagar inscrições
@@ -108,15 +109,6 @@ const ConfiguracaoTab = () => {
             )}
           </ContainerInput>
         </ContainerForm>
-
-        {/* <ContainerStatus>
-          <h2>Status robô</h2>
-
-          <p>Lendo mensagens: {data?.driverAtivo}</p>
-          <p></p>
-          <p></p>
-          <p></p>
-        </ContainerStatus> */}
       </Card>
     </Container>
   );

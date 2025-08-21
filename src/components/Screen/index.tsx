@@ -23,8 +23,8 @@ const Screen = () => {
     setLoading(true);
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       const currentPath = location.pathname;
-      const isOnLoginPage = currentPath === "/login";
-      const isOnPainel = currentPath !== "/login";
+      const isOnLoginPage = currentPath.includes("/login");
+      const isOnPainel = !currentPath.includes("/login");
 
       if (user) {
         dispatch(

@@ -3,7 +3,7 @@ import Card from "../../Card";
 import { Container } from "../styles";
 import { type IUser, type IUserWithId } from "../../../enums/types";
 import { ButtonsTable, ContainerButtonsTable } from "./styles";
-import { DeleteOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
+import { DeleteOutlined, SaveOutlined } from "@ant-design/icons";
 import { useAppSelector } from "../../../redux/hooks";
 import { useExecute } from "../../../hooks/useExecute";
 
@@ -26,11 +26,6 @@ const UsuariosTab = () => {
       key: "action",
       render: (_: unknown, record: IUserWithId & Partial<IUserWithId>) => (
         <ContainerButtonsTable>
-          <ButtonsTable color="blue" variant="outlined">
-            <EditOutlined />
-            <span>Editar</span>
-          </ButtonsTable>
-
           <ButtonsTable color="danger" variant="outlined">
             <DeleteOutlined />
             <span>Excluir</span>

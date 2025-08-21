@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ContainerCard = styled.div<{ $minHeightProp?: string }>`
+export const ContainerCard = styled.div<{ $minHeightProp?: string; $maxHeightProp?: string }>`
   flex: 1 1 465px;
   width: 100%;
   height: 100%;
@@ -8,6 +8,7 @@ export const ContainerCard = styled.div<{ $minHeightProp?: string }>`
   border-radius: 8px;
 
   ${({ $minHeightProp }) => $minHeightProp && `min-height: ${$minHeightProp};`}
+  ${({ $maxHeightProp }) => $maxHeightProp && `max-height: ${$maxHeightProp};`}
 
   background-color: #fff;
   overflow-y: auto;
