@@ -91,8 +91,10 @@ const ExecutarTab = () => {
     const itemsInscricoes = cargosUnicos.map((inscricao) => {
       const filteredUsers = usersInscricoes.filter((u) => u.cargo.toLowerCase() === inscricao);
 
+      const ajustedUsers = filteredUsers.map((userFilter, i) => ({ ...userFilter, uid: `${i + 1}` }));
+
       const columns: ColumnsType<IUserWithCargo & Partial<IUserWithId>> = [
-        { title: "Id", dataIndex: "id", key: "id", render: () => uuidv4() },
+        { title: "Id", dataIndex: "uid", key: "uid" },
         { title: "Nome", dataIndex: "nome", key: "nome" },
         { title: "CPF", dataIndex: "cpf", key: "cpf" },
         { title: "Telefone", dataIndex: "telefone", key: "telefone" },
@@ -141,7 +143,7 @@ const ExecutarTab = () => {
         label: inscricao.toUpperCase(),
         children: (
           <ContainerTable>
-            <Table<IUserWithCargo & Partial<IUserWithId>> rowKey="cpf" columns={columns} dataSource={filteredUsers} pagination={{ pageSize: 5 }} />
+            <Table<IUserWithCargo & Partial<IUserWithId>> rowKey="cpf" columns={columns} dataSource={ajustedUsers} pagination={{ pageSize: 5 }} />
             {user?.email?.includes("victor") && (
               <Button style={{ flex: "0 0 auto", width: "120px" }} variant="outlined" color="danger" onClick={() => deleteAllInscricoesCargo(inscricao)}>
                 Excluir tudo
@@ -198,7 +200,7 @@ const ExecutarTab = () => {
           ))}
       </Modal>
 
-      <div style={{ display: "flex", gap: "16px", marginBottom: "20px", flexFlow: "row wrap" }}>
+      <div style={{ display: "flex", gap: "16px", marginBottom: "40px", flexFlow: "row wrap" }}>
         {cardsData?.map((card) => (
           <Card key={card.title} title={card.title} maxHeightProp="190px">
             <div>
