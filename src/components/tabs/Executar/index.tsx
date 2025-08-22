@@ -66,7 +66,7 @@ const ExecutarTab = () => {
         value:
           statusApi === null ? (
             <Spin size="default" indicator={<LoadingOutlined />} />
-          ) : statusApi.inscricoesRodando.length < 1 ? (
+          ) : (statusApi.inscricoesRodando?.length ?? 0) < 1 ? (
             "Nenhuma"
           ) : (
             statusApi.inscricoesRodando.map((value) => `(${value.toLocaleUpperCase()})`).join(", ")

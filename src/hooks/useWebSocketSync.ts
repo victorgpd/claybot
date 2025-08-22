@@ -50,6 +50,9 @@ export const useWebSocketSync = () => {
     wsStatusApi.current.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
+        if (!data.dados) {
+          return;
+        }
 
         if (data.dados.contatoName !== undefined) {
           setToLocalStorage("contato", data.dados.contatoName);
