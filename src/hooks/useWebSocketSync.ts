@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import type { IUserWithCargo, IUserWithCargos } from "../enums/types";
 import { setUsers, setUsersInscricoes, setInscricoesPendentes, setInscricoesConcluidas, setLogs, setStatusApi } from "../redux/globalReducer/slice";
+import { setToLocalStorage } from "../utils/localStorage";
 
 export const useWebSocketSync = () => {
   const dispatch = useAppDispatch();
@@ -10,7 +11,7 @@ export const useWebSocketSync = () => {
   const wsUsers = useRef<WebSocket | null>(null);
   const wsInscricoes = useRef<WebSocket | null>(null);
   const wsLogs = useRef<WebSocket | null>(null);
-  const wsStatusApi = useRef<WebSocket | null>(null); // <-- novo
+  const wsStatusApi = useRef<WebSocket | null>(null);
 
   useEffect(() => {
     if (!linkApi) return;
@@ -45,18 +46,26 @@ export const useWebSocketSync = () => {
       if (msg?.dados) dispatch(setLogs(msg.dados));
     };
 
-    // === WebSocket para status da API ===
     wsStatusApi.current = new WebSocket(`${linkApi.replace("http", "ws")}/ws/status`);
     wsStatusApi.current.onmessage = (event) => {
-      const msg = JSON.parse(event.data);
-      dispatch(setStatusApi(msg.dados ?? msg));
+      try {
+        const data = JSON.parse(event.data);
+
+        if (data.dados.contatoName !== undefined) {
+          setToLocalStorage("contato", data.dados.contatoName);
+        }
+
+        dispatch(setStatusApi(data.dados));
+      } catch (err) {
+        console.error("Erro ao processar mensagem WS:", err, event.data);
+      }
     };
 
     return () => {
       wsUsers.current?.close();
       wsInscricoes.current?.close();
       wsLogs.current?.close();
-      wsStatusApi.current?.close(); // <-- fecha também
+      wsStatusApi.current?.close();
     };
   }, [linkApi]);
 };

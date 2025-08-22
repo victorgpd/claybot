@@ -8,5 +8,8 @@ export const getFromLocalStorage = (key: string) => {
 };
 
 export const setToLocalStorage = (key: string, value: unknown) => {
-  localStorage.setItem(key, JSON.stringify(value));
+  const jsonValue = JSON.stringify(value);
+  localStorage.setItem(key, jsonValue);
+
+  window.dispatchEvent(new CustomEvent("localStorageChange", { detail: { key, value: jsonValue } }));
 };

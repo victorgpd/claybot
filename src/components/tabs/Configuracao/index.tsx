@@ -32,6 +32,27 @@ const ConfiguracaoTab = () => {
     setContatoName(contatoStorage);
   }, []);
 
+  useEffect(() => {
+    const handleChange = (event: any) => {
+      if ("detail" in event) {
+        const { key, value } = event.detail;
+        if (key === "contato") setContatoName(JSON.parse(value) || "");
+        if (key === "linkApi") setApiUrl(JSON.parse(value) || "");
+      } else {
+        if (event.key === "contato") setContatoName(event.newValue ? JSON.parse(event.newValue) : "");
+        if (event.key === "linkApi") setApiUrl(event.newValue ? JSON.parse(event.newValue) : "");
+      }
+    };
+
+    window.addEventListener("storage", handleChange as any);
+    window.addEventListener("localStorageChange", handleChange as any);
+
+    return () => {
+      window.removeEventListener("storage", handleChange as any);
+      window.removeEventListener("localStorageChange", handleChange as any);
+    };
+  }, []);
+
   const handleSave = () => {
     setToLocalStorage("linkApi", apiUrl);
     setDisabled(true);
@@ -44,8 +65,6 @@ const ConfiguracaoTab = () => {
 
   const handleChange2 = (value: string) => {
     updateContatoName(value);
-    setToLocalStorage("contato", value);
-    setContatoName(value);
   };
 
   const handleOk = () => {
