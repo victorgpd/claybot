@@ -33,9 +33,9 @@ const ConfiguracaoTab = () => {
   }, []);
 
   useEffect(() => {
-    const handleChange = (event: any) => {
+    const handleChange = (event: StorageEvent | CustomEvent) => {
       if ("detail" in event) {
-        const { key, value } = event.detail;
+        const { key, value } = event.detail as { key: string; value: string };
         if (key === "contato") setContatoName(JSON.parse(value) || "");
         if (key === "linkApi") setApiUrl(JSON.parse(value) || "");
       } else {
@@ -44,12 +44,12 @@ const ConfiguracaoTab = () => {
       }
     };
 
-    window.addEventListener("storage", handleChange as any);
-    window.addEventListener("localStorageChange", handleChange as any);
+    window.addEventListener("storage", handleChange as EventListener);
+    window.addEventListener("localStorageChange", handleChange as EventListener);
 
     return () => {
-      window.removeEventListener("storage", handleChange as any);
-      window.removeEventListener("localStorageChange", handleChange as any);
+      window.removeEventListener("storage", handleChange as EventListener);
+      window.removeEventListener("localStorageChange", handleChange as EventListener);
     };
   }, []);
 
