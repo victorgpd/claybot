@@ -15,7 +15,7 @@ export const ContainerTabs = styled.div`
   overflow-x: auto;
   white-space: nowrap;
 
-  display: flex;
+  
 `;
 
 export const Tabs = styled(TabsAntd)`

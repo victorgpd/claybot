@@ -212,7 +212,7 @@ const ExecutarTab = () => {
         ))}
       </div>
 
-      <Card title="Inscrições pendentes" minHeightProp="650px">
+      <Card title="Inscrições pendentes" minHeightProp="640px">
         <ContainerTabs ref={tabsRef}>
           <Tabs type="card" items={items} />
         </ContainerTabs>
