@@ -2609,6 +2609,8 @@ SPDX-License-Identifier: Apache-2.0
   height: 100%;
   overflow-x: auto;
   white-space: nowrap;
+
+  
 `,nfe=Nn(kx)`
   width: 100%;
   height: 100%;
@@ -2641,7 +2643,7 @@ SPDX-License-Identifier: Apache-2.0
   ${({$maxHeightProp:e})=>e&&`max-height: ${e};`}
 
   background-color: #fff;
-  overflow-y: auto;
+
   gap: 12px;
   display: flex;
   flex-flow: column;
