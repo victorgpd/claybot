@@ -49,7 +49,8 @@ const ExecutarTab = () => {
     setOptionsPorCargo((prev) => {
       const defaultOptions = [
         { value: "https://forms.office.com/e/1wLWvYR8kS", label: "https://forms.office.com/e/1wLWvYR8kS" },
-        { value: "https://forms.cloud.microsoft/r/Cm6N0frFC8", label: "https://forms.cloud.microsoft/r/Cm6N0frFC8" },
+        { value: "https://forms.cloud.microsoft/r/YVsn49HPeU", label: "https://forms.cloud.microsoft/r/Cm6N0frFC8" },
+        { value: "https://forms.cloud.microsoft/r/YVsn49HPeU", label: "https://forms.cloud.microsoft/r/YVsn49HPeU" },
       ];
 
       const prevOptions = prev[cargo] || defaultOptions;
@@ -185,6 +186,7 @@ const ExecutarTab = () => {
                   optionsPorCargo[inscricao] || [
                     { value: "https://forms.office.com/e/1wLWvYR8kS", label: "https://forms.office.com/e/1wLWvYR8kS" },
                     { value: "https://forms.cloud.microsoft/r/Cm6N0frFC8", label: "https://forms.cloud.microsoft/r/Cm6N0frFC8" },
+                    { value: "https://forms.cloud.microsoft/r/YVsn49HPeU", label: "https://forms.cloud.microsoft/r/YVsn49HPeU" },
                   ]
                 }
               />
