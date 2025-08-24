@@ -2607,10 +2607,8 @@ SPDX-License-Identifier: Apache-2.0
 `,tfe=On.div`
   width: 100%;
   height: 100%;
-  overflow-x: auto;
+  /* overflow-x: auto; */
   white-space: nowrap;
-
-  
 `,nfe=On(kx)`
   width: 100%;
   height: 100%;
