@@ -2636,7 +2636,6 @@ SPDX-License-Identifier: Apache-2.0
   width: 100%;
   height: 100%;
   padding: 16px;
-  overflow-y: auto;
   border-radius: 8px;
   overflow-x: hidden;
 
