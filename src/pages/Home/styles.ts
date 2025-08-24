@@ -12,10 +12,8 @@ export const PageContainer = styled.div`
 export const ContainerTabs = styled.div`
   width: 100%;
   height: 100%;
-  overflow-x: auto;
-  white-space: nowrap;
-
-  
+  /* overflow-x: auto; */
+  /* white-space: nowrap; */
 `;
 
 export const Tabs = styled(TabsAntd)`
@@ -28,6 +26,7 @@ export const Tabs = styled(TabsAntd)`
   .ant-tabs-tabpane-active {
     width: 100%;
     height: 100%;
+    /* overflow-x: auto; */
   }
 
   .ant-tabs-nav-list {

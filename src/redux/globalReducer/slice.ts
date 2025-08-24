@@ -42,7 +42,7 @@ const initialState: initialStateType = {
   inscricoesConcluidas: [],
 
   logs: [],
-  linkApi: "",
+  linkApi: "https://unified-muskrat-known.ngrok-free.app",
 
   statusApi: null,
 };

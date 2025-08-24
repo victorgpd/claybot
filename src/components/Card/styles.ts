@@ -7,6 +7,7 @@ export const ContainerCard = styled.div<{ $minHeightProp?: string; $maxHeightPro
   padding: 16px;
   overflow-y: auto;
   border-radius: 8px;
+  overflow-x: hidden;
 
   ${({ $minHeightProp }) => $minHeightProp && `min-height: ${$minHeightProp};`}
   ${({ $maxHeightProp }) => $maxHeightProp && `max-height: ${$maxHeightProp};`}

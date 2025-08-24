@@ -48,5 +48,5 @@ export const ContainerTable = styled.div`
 export const ContainerInputs = styled.div`
   gap: 10px;
   display: flex;
-  flex-flow: row;
+  flex-flow: row wrap;
 `;

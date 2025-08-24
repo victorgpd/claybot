@@ -49,7 +49,7 @@ const ExecutarTab = () => {
     setOptionsPorCargo((prev) => {
       const defaultOptions = [
         { value: "https://forms.office.com/e/1wLWvYR8kS", label: "https://forms.office.com/e/1wLWvYR8kS" },
-        { value: "https://forms.cloud.microsoft/r/YVsn49HPeU", label: "https://forms.cloud.microsoft/r/Cm6N0frFC8" },
+        { value: "https://forms.cloud.microsoft/r/Cm6N0frFC8", label: "https://forms.cloud.microsoft/r/Cm6N0frFC8" },
         { value: "https://forms.cloud.microsoft/r/YVsn49HPeU", label: "https://forms.cloud.microsoft/r/YVsn49HPeU" },
       ];
 
@@ -181,7 +181,7 @@ const ExecutarTab = () => {
                 placeholder="Link para inscrição"
                 value={linkPorCargo[inscricao] ? [linkPorCargo[inscricao]] : []}
                 onChange={(value) => handleChangeLink(inscricao, value)}
-                style={{ flex: 1, maxWidth: "500px" }}
+                style={{ flex: "1 0 320px", maxWidth: "500px" }}
                 options={
                   optionsPorCargo[inscricao] || [
                     { value: "https://forms.office.com/e/1wLWvYR8kS", label: "https://forms.office.com/e/1wLWvYR8kS" },
@@ -204,7 +204,7 @@ const ExecutarTab = () => {
                 Excluir tudo
               </Button>
             </ContainerInputs>
-            <Table<IUserWithCargo & Partial<IUserWithId>> rowKey="cpf" columns={columns} dataSource={ajustedUsers} pagination={{ pageSize: 5 }} />
+            <Table<IUserWithCargo & Partial<IUserWithId>> rowKey="cpf" columns={columns} dataSource={ajustedUsers} pagination={{ pageSize: 5 }} scroll={{ x: "max-content" }} />
           </ContainerTable>
         ),
       };
