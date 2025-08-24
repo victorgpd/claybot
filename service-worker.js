@@ -1,5 +1,6 @@
 self.addEventListener("push", (event) => {
   const data = event.data ? event.data.text() : "Nova notificação!";
+  console.log("Push recebido:", data); // <-- para debug
   const options = {
     body: data,
     // icon: "/icon.png", // opcional
