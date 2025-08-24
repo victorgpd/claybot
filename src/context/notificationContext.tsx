@@ -2,6 +2,7 @@ import { notification } from "antd";
 import { createContext } from "react";
 import type { NotificationArgsProps } from "antd";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const NotificationContext = createContext<{
   notify: {
     show: (config: NotificationArgsProps) => void;
