@@ -12,8 +12,6 @@ export const PageContainer = styled.div`
 export const ContainerTabs = styled.div`
   width: 100%;
   height: 100%;
-  /* overflow-x: auto; */
-  /* white-space: nowrap; */
 `;
 
 export const Tabs = styled(TabsAntd)`

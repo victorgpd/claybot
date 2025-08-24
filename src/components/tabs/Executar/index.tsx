@@ -204,7 +204,14 @@ const ExecutarTab = () => {
                 Excluir tudo
               </Button>
             </ContainerInputs>
-            <Table<IUserWithCargo & Partial<IUserWithId>> rowKey="cpf" columns={columns} dataSource={ajustedUsers} pagination={{ pageSize: 5 }} scroll={{ x: "max-content" }} />
+            <Table<IUserWithCargo & Partial<IUserWithId>>
+              rowKey="cpf"
+              columns={columns}
+              dataSource={ajustedUsers}
+              pagination={{ pageSize: 5 }}
+              scroll={{ x: "max-content" }}
+              style={{ scrollbarWidth: "none" }}
+            />
           </ContainerTable>
         ),
       };
