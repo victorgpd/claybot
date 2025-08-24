@@ -44,3 +44,9 @@ export const ContainerTable = styled.div`
 
   position: relative;
 `;
+
+export const ContainerInputs = styled.div`
+  gap: 10px;
+  display: flex;
+  flex-flow: row;
+`;

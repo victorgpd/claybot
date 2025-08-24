@@ -9,10 +9,10 @@ import type { ColumnsType } from "antd/es/table";
 import { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { useExecute } from "../../../hooks/useExecute";
-import { Button, Modal, Spin, Table, Tabs } from "antd";
+import { Button, Modal, Select, Spin, Table, Tabs } from "antd";
 import { ContainerTabs } from "../../../pages/Home/styles";
 import { CheckSquareOutlined, ClockCircleOutlined, DeleteOutlined, WarningOutlined, UsergroupAddOutlined, LoadingOutlined, SyncOutlined } from "@ant-design/icons";
-import { ButtonsTable, ContainerButtons, ContainerButtonsTable, ContainerTable, ContainerUsers } from "./styles";
+import { ButtonsTable, ContainerButtons, ContainerButtonsTable, ContainerInputs, ContainerTable, ContainerUsers } from "./styles";
 
 interface IUserWithId extends IUserWithCargos {
   uid: string;
@@ -22,8 +22,11 @@ interface IUserWithId extends IUserWithCargos {
 const ExecutarTab = () => {
   const tabsRef = useRef<HTMLDivElement>(null);
 
-  const { saveInscricoes, loading, deleteInscricao, deleteAllInscricoesCargo, updateInscricao } = useExecute();
+  const { saveInscricoes, loading, deleteInscricao, deleteAllInscricoesCargo, updateInscricao, registerInscricao } = useExecute();
   const { usersInscricoes = [], users = [], user, statusApi } = useAppSelector((state) => state.globalReducer);
+
+  const [linkPorCargo, setLinkPorCargo] = useState<Record<string, string>>({});
+  const [optionsPorCargo, setOptionsPorCargo] = useState<Record<string, { label: string; value: string }[]>>({});
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInscricao, setSelectedInscricao] = useState<{ id: number; cargo: string } | null>(null);
@@ -34,6 +37,33 @@ const ExecutarTab = () => {
   const [items, setItems] = useState<React.ComponentProps<typeof Tabs>["items"]>([]);
 
   const [cardsData, setCardsData] = useState<{ title: string; value: string | number | ReactNode; color: string; icon: ReactElement }[]>([]);
+
+  const handleChangeLink = (cargo: string, value: string[]) => {
+    const lastValue = value[value.length - 1] || "";
+
+    setLinkPorCargo((prev) => ({
+      ...prev,
+      [cargo]: lastValue,
+    }));
+
+    setOptionsPorCargo((prev) => {
+      const defaultOptions = [
+        { value: "https://forms.office.com/e/1wLWvYR8kS", label: "https://forms.office.com/e/1wLWvYR8kS" },
+        { value: "https://forms.cloud.microsoft/r/Cm6N0frFC8", label: "https://forms.cloud.microsoft/r/Cm6N0frFC8" },
+      ];
+
+      const prevOptions = prev[cargo] || defaultOptions;
+
+      if (lastValue && !prevOptions.some((opt) => opt.value === lastValue)) {
+        return {
+          ...prev,
+          [cargo]: [...prevOptions, { label: lastValue, value: lastValue }],
+        };
+      }
+
+      return prev;
+    });
+  };
 
   useEffect(() => {
     setCardsData([
@@ -143,19 +173,43 @@ const ExecutarTab = () => {
         label: inscricao.toUpperCase(),
         children: (
           <ContainerTable>
-            <Table<IUserWithCargo & Partial<IUserWithId>> rowKey="cpf" columns={columns} dataSource={ajustedUsers} pagination={{ pageSize: 5 }} />
-            {user?.email?.includes("victor") && (
+            <ContainerInputs>
+              <Select
+                variant="underlined"
+                mode="tags"
+                placeholder="Link para inscrição"
+                value={linkPorCargo[inscricao] ? [linkPorCargo[inscricao]] : []}
+                onChange={(value) => handleChangeLink(inscricao, value)}
+                style={{ flex: 1, maxWidth: "500px" }}
+                options={
+                  optionsPorCargo[inscricao] || [
+                    { value: "https://forms.office.com/e/1wLWvYR8kS", label: "https://forms.office.com/e/1wLWvYR8kS" },
+                    { value: "https://forms.cloud.microsoft/r/Cm6N0frFC8", label: "https://forms.cloud.microsoft/r/Cm6N0frFC8" },
+                  ]
+                }
+              />
+
+              <Button
+                style={{ flex: "0 0 auto", width: "120px" }}
+                variant="outlined"
+                color="primary"
+                onClick={() => registerInscricao({ cargoRequest: inscricao, linkRequest: linkPorCargo[inscricao] })}
+              >
+                Inscrever
+              </Button>
+
               <Button style={{ flex: "0 0 auto", width: "120px" }} variant="outlined" color="danger" onClick={() => deleteAllInscricoesCargo(inscricao)}>
                 Excluir tudo
               </Button>
-            )}
+            </ContainerInputs>
+            <Table<IUserWithCargo & Partial<IUserWithId>> rowKey="cpf" columns={columns} dataSource={ajustedUsers} pagination={{ pageSize: 5 }} />
           </ContainerTable>
         ),
       };
     });
 
     setItems(itemsInscricoes);
-  }, [usersInscricoes, user]);
+  }, [usersInscricoes, user, linkPorCargo, optionsPorCargo]);
 
   const handleUserFieldsChange = (uid: string, newFields: Partial<IUserWithId>) => setUsersFieldsArray((prev) => prev.map((u) => (u.uid === uid ? { ...u, ...newFields } : u)));
 

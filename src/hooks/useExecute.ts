@@ -100,6 +100,15 @@ export const useExecute = () => {
     setLoading(false);
   };
 
+  const registerInscricao = async (inscricao: { cargoRequest: string; linkRequest: string }) => {
+    setLoading(true);
+
+    const response = await handleApi(() => axios.post(`${linkApi}/api/inscricoes/now`, inscricao), notification, "Erro ao realizar inscrição");
+
+    if (response) notification.success("Inscrição acionada com sucesso!");
+    setLoading(false);
+  };
+
   const deleteAllInscricoesCargo = async (cargo: string) => {
     setLoading(true);
 
@@ -153,6 +162,7 @@ export const useExecute = () => {
     createUser,
     searchLogs,
     clearLogs,
+    registerInscricao,
     searchInscricoes,
     statusApi,
     updateInscricao,
