@@ -181,7 +181,7 @@ const ExecutarTab = () => {
                 placeholder="Link para inscrição"
                 value={linkPorCargo[inscricao] ? [linkPorCargo[inscricao]] : []}
                 onChange={(value) => handleChangeLink(inscricao, value)}
-                style={{ flex: "1 0 320px", maxWidth: "500px" }}
+                style={{ flex: "1 0 auto", width: "100%", maxWidth: "500px" }}
                 options={
                   optionsPorCargo[inscricao] || [
                     { value: "https://forms.office.com/e/1wLWvYR8kS", label: "https://forms.office.com/e/1wLWvYR8kS" },
@@ -192,7 +192,7 @@ const ExecutarTab = () => {
               />
 
               <Button
-                style={{ flex: "0 0 auto", width: "120px" }}
+                style={{ flex: "1 0 auto", maxWidth: "150px" }}
                 variant="outlined"
                 color="primary"
                 onClick={() => registerInscricao({ cargoRequest: inscricao, linkRequest: linkPorCargo[inscricao] })}
@@ -200,7 +200,7 @@ const ExecutarTab = () => {
                 Inscrever
               </Button>
 
-              <Button style={{ flex: "0 0 auto", width: "120px" }} variant="outlined" color="danger" onClick={() => deleteAllInscricoesCargo(inscricao)}>
+              <Button style={{ flex: "1 0 auto", maxWidth: "150px" }} variant="outlined" color="danger" onClick={() => deleteAllInscricoesCargo(inscricao)}>
                 Excluir tudo
               </Button>
             </ContainerInputs>
