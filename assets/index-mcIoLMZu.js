@@ -2622,7 +2622,7 @@ SPDX-License-Identifier: Apache-2.0
   }
 
   .ant-tabs-nav-list {
-    overflow-x: auto !important;
+    /* overflow-x: auto !important; */
     white-space: nowrap;
     scrollbar-width: none;
   }
