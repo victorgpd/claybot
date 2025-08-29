@@ -10,7 +10,7 @@ import { useExecute } from "../../../hooks/useExecute";
 const UsuariosTab = () => {
   const { users } = useAppSelector((state) => state.globalReducer);
 
-  const { createUser } = useExecute();
+  const { createUser, deleteUser } = useExecute();
 
   const [form] = Form.useForm<IUser>();
 
@@ -26,7 +26,7 @@ const UsuariosTab = () => {
       key: "action",
       render: (_: unknown, record: IUserWithId & Partial<IUserWithId>) => (
         <ContainerButtonsTable>
-          <ButtonsTable color="danger" variant="outlined">
+          <ButtonsTable color="danger" variant="outlined" onClick={() => deleteUser(record.id)}>
             <DeleteOutlined />
             <span>Excluir</span>
           </ButtonsTable>

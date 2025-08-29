@@ -157,8 +157,17 @@ export const useExecute = () => {
     if (data) dispatch(setLogs(data));
   };
 
+  const deleteUser = async (id: number) => {
+    setLoading(true);
+    const response = await handleApi(() => axios.delete(`${linkApi}/api/users/${id}`), notification);
+
+    if (response) notification.success("Usuário deletado com sucesso!");
+    setLoading(false);
+  };
+
   return {
     loading,
+    deleteUser,
     createUser,
     searchLogs,
     clearLogs,
