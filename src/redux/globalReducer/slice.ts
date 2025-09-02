@@ -42,7 +42,7 @@ const initialState: initialStateType = {
   inscricoesConcluidas: [],
 
   logs: [],
-  linkApi: "https://unified-muskrat-known.ngrok-free.app",
+  linkApi: "https://unified-muskrat-known.ngrok-free.app/claybot",
 
   statusApi: null,
 };

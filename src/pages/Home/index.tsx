@@ -20,7 +20,7 @@ const Home = () => {
   useWebSocketSync();
 
   useEffect(() => {
-    setToLocalStorage("linkApi", "https://unified-muskrat-known.ngrok-free.app");
+    setToLocalStorage("linkApi", "https://unified-muskrat-known.ngrok-free.app/claybot");
 
     const item = getFromLocalStorage("linkApi");
     if (item) {

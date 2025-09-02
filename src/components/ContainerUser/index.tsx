@@ -76,7 +76,7 @@ const UserContainer = ({ userFields, options, selectedUserIds, onUserFieldsChang
 
     const lista: { label: string; value: string }[] = [];
 
-    for (let dia = diaAtual; dia <= diasNoMes; dia++) {
+    for (let dia = diaAtual; dia <= diasNoMes * 2; dia++) {
       const data = dayjs(new Date(ano, mes, dia)).format("DD/MM");
       lista.push({
         label: `soc t3 - ${data}`,
