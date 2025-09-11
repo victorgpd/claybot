@@ -2,7 +2,7 @@ import Card from "../../Card";
 import { Container } from "../styles";
 import { ContainerForm, ContainerInput } from "./styles";
 import { useEffect, useState } from "react";
-import { Button, Input, Modal, Select } from "antd";
+import { Button, Input, Modal } from "antd";
 import { getFromLocalStorage, setToLocalStorage } from "../../../utils/localStorage";
 import { useNotification } from "../../../hooks/useNotification";
 import { ClearOutlined, DeleteOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
@@ -63,9 +63,9 @@ const ConfiguracaoTab = () => {
     setDisabled(!disabled);
   };
 
-  const handleChange2 = (value: string) => {
-    updateContatoName(value);
-  };
+  // const handleChange2 = (value: string) => {
+  //   updateContatoName(value);
+  // };
 
   const handleOk = () => {
     deleteAllInscricoes();
@@ -100,14 +100,15 @@ const ConfiguracaoTab = () => {
             <>
               <span style={{ fontWeight: 500 }}>Selecionar contato ({contatoName})</span>
               <ContainerInput>
-                <Select
+                <Input placeholder="Digite o nome do contato" onPressEnter={(e) => updateContatoName(e.currentTarget.value)} disabled={disabled} style={{ width: "100%" }} />
+                {/* <Select
                   style={{ width: 250 }}
                   onChange={handleChange2}
                   options={[
                     { value: "gigroup", label: "GiGroup" },
                     { value: "eu", label: "Eu" },
                   ]}
-                />
+                /> */}
               </ContainerInput>
             </>
           )}

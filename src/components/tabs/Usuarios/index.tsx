@@ -6,6 +6,7 @@ import { ButtonsTable, ContainerButtonsTable } from "./styles";
 import { DeleteOutlined, SaveOutlined } from "@ant-design/icons";
 import { useAppSelector } from "../../../redux/hooks";
 import { useExecute } from "../../../hooks/useExecute";
+import { ContainerTable } from "../Executar/styles";
 
 const UsuariosTab = () => {
   const { users } = useAppSelector((state) => state.globalReducer);
@@ -46,7 +47,9 @@ const UsuariosTab = () => {
   return (
     <Container>
       <Card title="Usuários" minHeightProp="519px">
-        <Table<IUserWithId> rowKey="cpf" columns={columns} dataSource={users} pagination={{ pageSize: 5 }} style={{ height: "100%" }} />
+        <ContainerTable>
+          <Table<IUserWithId> rowKey="cpf" columns={columns} dataSource={users} pagination={{ pageSize: 5 }} scroll={{ x: "max-content" }} style={{ scrollbarWidth: "none" }} />
+        </ContainerTable>
       </Card>
 
       <Card title="Adicionar usuário" minHeightProp="565px">
