@@ -100,7 +100,7 @@ const ConfiguracaoTab = () => {
             <>
               <span style={{ fontWeight: 500 }}>Selecionar contato ({contatoName})</span>
               <ContainerInput>
-                <Input placeholder="Digite o nome do contato" onPressEnter={(e) => updateContatoName(e.currentTarget.value)} disabled={disabled} style={{ width: "100%" }} />
+                <Input placeholder="Digite o nome do contato" onPressEnter={(e) => updateContatoName(e.currentTarget.value)} style={{ width: "100%" }} />
                 {/* <Select
                   style={{ width: 250 }}
                   onChange={handleChange2}
