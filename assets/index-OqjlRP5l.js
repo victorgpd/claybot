@@ -2737,6 +2737,7 @@ SPDX-License-Identifier: Apache-2.0
 
   gap: 12px;
   display: flex;
+  flex-flow: row wrap;
 `;On.div`
   width: 100%;
   margin-top: 120px;
